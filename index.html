@@ -18,7 +18,7 @@ body{
   overflow:auto;
 }
 
-/* 手机外壳 */
+/* 手机 */
 .phone{
   width:350px;
   height:720px;
@@ -26,8 +26,7 @@ body{
   overflow:hidden;
   position:relative;
   box-shadow:0 30px 80px rgba(0,0,0,.25);
-  background-size:cover;
-  background-position:center;
+  background:linear-gradient(180deg,#f6e9f2,#f0ddea);
 }
 
 /* 状态栏 */
@@ -36,9 +35,7 @@ body{
   top:18px;
   left:0;
   width:100%;
-  height:40px;
   display:flex;
-  align-items:center;
   justify-content:space-between;
   padding:0 30px;
   color:white;
@@ -48,7 +45,6 @@ body{
   pointer-events:none;
 }
 
-/* 灵动岛 */
 .island{
   position:absolute;
   top:14px;
@@ -91,84 +87,130 @@ body{
   flex:1;
   display:flex;
   overflow-x:auto;
-  overflow-y:hidden;
   scroll-snap-type:x mandatory;
-  scroll-behavior:smooth;
-  -webkit-overflow-scrolling:touch;
 }
 .pages::-webkit-scrollbar{display:none;}
 
 .page{
   flex:0 0 100%;
   scroll-snap-align:start;
-  padding:110px 25px 120px;
+  padding:110px 20px 120px;
   position:relative;
 }
 
-/* 简介 */
+/* ===== 第一页 ===== */
+
 .profile-bg{
-  height:150px;
-  border-radius:28px;
-  margin:0 12px 6px 12px;
-  background-size:cover;
-  background-position:center;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-  cursor:pointer;
+  height:170px;
+  border-radius:30px;
+  background:linear-gradient(135deg,#f8cfe0,#f3b8d2);
 }
 
 .avatar{
   position:absolute;
-  top:118px;
-  left:28px;
-  width:98px;
-  height:98px;
+  top:140px;
+  left:30px;
+  width:100px;
+  height:100px;
   border-radius:50%;
   border:5px solid white;
   overflow:hidden;
   background:white;
-  cursor:pointer;
 }
 .avatar img{width:100%;height:100%;object-fit:cover;}
 
 .profile-info{
   position:absolute;
-  left:140px;
-  top:118px;
-  width:calc(100% - 160px);
-  display:flex;
-  flex-direction:column;
-  gap:6px;
+  top:150px;
+  left:150px;
 }
-.profile-info h3{font-size:17px;}
+.profile-info h3{font-size:18px;}
 .profile-info p{font-size:13px;color:#6e5560;}
-.location{font-size:12px;color:rgba(60,50,60,.6);}
+.location{font-size:12px;color:#777;}
+
+.first-row{
+  margin-top:100px;
+  display:flex;
+  gap:15px;
+}
 
 .id-card{
-  margin-top:22px;
-  padding:16px;
+  flex:1;
+  padding:15px;
   border-radius:22px;
-  background:rgba(255,255,255,.55);
+  background:rgba(255,255,255,.6);
   backdrop-filter:blur(30px);
   font-size:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,.05);
 }
 
-.apps-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-top:22px;
+.apps-side{
+  width:100px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
 
-.app{text-align:center;font-size:11px;cursor:pointer}
+.app{
+  text-align:center;
+  font-size:11px;
+  cursor:pointer;
+}
 .icon{
   width:58px;
   height:58px;
   border-radius:18px;
   background:linear-gradient(145deg,#f4e8ee,#e8e3f6);
-  margin:0 auto 6px;
+  margin:0 auto 5px;
 }
 
-/* 页面指示点 */
+/* ===== 第二页 ===== */
+
+.photo-show{
+  position:relative;
+  height:120px;
+  margin-bottom:20px;
+}
+.photo-show img{
+  position:absolute;
+  width:90px;
+  height:110px;
+  object-fit:cover;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+.photo1{left:10px;top:10px;transform:rotate(-6deg);}
+.photo2{left:120px;top:0;transform:rotate(4deg);}
+.photo3{left:220px;top:15px;transform:rotate(-3deg);}
+
+.second-row{
+  display:flex;
+  gap:15px;
+}
+
+.love-box{
+  flex:1;
+  padding:18px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#ffd4e6,#ffc1da);
+  text-align:center;
+  box-shadow:0 10px 30px rgba(255,105,180,.15);
+}
+.love-title{font-size:14px;}
+.love-days{
+  font-size:26px;
+  font-weight:600;
+  margin-top:8px;
+}
+
+.apps-right{
+  width:100px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* 指示点 */
 .indicator{
   position:absolute;
   bottom:95px;
@@ -186,7 +228,7 @@ body{
 }
 .dot.active{opacity:1}
 
-/* ===== APP 全屏界面 ===== */
+/* APP界面保持不动 */
 .app-screen{
   position:absolute;
   inset:0;
@@ -195,7 +237,6 @@ body{
   display:none;
   flex-direction:column;
 }
-
 .app-header{
   height:60px;
   display:flex;
@@ -205,97 +246,8 @@ body{
   font-weight:600;
   border-bottom:1px solid #eee;
 }
-
-#backBtn{
-  margin-right:15px;
-  font-size:26px;
-  cursor:pointer;
-}
-
-.app-content{
-  flex:1;
-  overflow:auto;
-  padding:20px;
-}
-/* ===== 恋爱计时 ===== */
-.love-box{
-  margin-top:18px;
-  padding:14px;
-  border-radius:20px;
-  background:rgba(255,255,255,.55);
-  backdrop-filter:blur(25px);
-  text-align:center;
-  box-shadow:0 10px 30px rgba(255,105,180,.1);
-}
-.love-title{
-  font-size:13px;
-  opacity:.7;
-}
-.love-days{
-  font-size:20px;
-  font-weight:600;
-  margin-top:6px;
-  color:#ff4fa3;
-}
-
-/* ===== 音乐播放器 ===== */
-.music-box{
-  margin-top:14px;
-  padding:12px;
-  border-radius:18px;
-  background:rgba(255,255,255,.5);
-  backdrop-filter:blur(20px);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:13px;
-}
-.music-box button{
-  background:#ff6fb1;
-  border:none;
-  padding:6px 14px;
-  border-radius:14px;
-  color:white;
-  font-size:12px;
-}
-
-/* ===== 首页照片条 ===== */
-.photo-strip{
-  margin-top:14px;
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-}
-.photo-strip img{
-  width:90px;
-  height:90px;
-  border-radius:16px;
-  object-fit:cover;
-}
-.photo-strip::-webkit-scrollbar{display:none;}
-
-/* ===== 升级版 ID 卡（覆盖原样式） ===== */
-.id-card{
-  margin-top:22px;
-  padding:18px;
-  border-radius:26px;
-  background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(255,240,250,.4));
-  backdrop-filter:blur(40px);
-  font-size:13px;
-  line-height:1.6;
-  position:relative;
-  box-shadow:0 15px 40px rgba(255,105,180,.15);
-  border:1px solid rgba(255,255,255,.6);
-}
-.id-card::before{
-  content:"Sweet ID";
-  position:absolute;
-  top:12px;
-  right:18px;
-  font-size:11px;
-  color:rgba(0,0,0,.25);
-  letter-spacing:1px;
-}
+#backBtn{margin-right:15px;font-size:26px;cursor:pointer;}
+.app-content{flex:1;overflow:auto;padding:20px;}
 </style>
 </head>
 
@@ -317,55 +269,57 @@ body{
 <div class="home" id="home">
 <div class="pages" id="pages">
 
+<!-- ===== 第一页 ===== -->
 <div class="page">
-<div class="profile-bg" id="profileBg"></div>
-<div class="avatar" id="avatarBox"><img id="avatarImg"></div>
+
+<div class="profile-bg"></div>
+<div class="avatar"><img src=""></div>
 
 <div class="profile-info">
-<h3 contenteditable="true" id="nickname">甜妹用户</h3>
-<p contenteditable="true" id="idSign">灰粉宇宙少女 ♡</p>
-<div contenteditable="true" class="location" id="loc">📍 上海</div>
+<h3 contenteditable="true">甜妹用户</h3>
+<p contenteditable="true">灰粉宇宙少女 ♡</p>
+<div contenteditable="true" class="location">📍 上海</div>
 </div>
 
+<div class="first-row">
 <div class="id-card" contenteditable="true">
 姓名 林甜甜<br>
 ID Sweet-0214<br>
 学校 Seoul Art High<br>
 性格 ENFP
 </div>
-<!-- 恋爱计时 -->
-<div class="love-box">
-  <div class="love-title">💗 恋爱计时</div>
-  <div id="loveDays" class="love-days">计算中...</div>
-</div>
 
-<!-- 音乐播放器 -->
-<div class="music-box">
-  <div>🎵 我们的歌</div>
-  <button id="musicBtn">播放</button>
-  <audio id="bgm" src=""></audio>
-</div>
-
-<!-- 精选照片 -->
-<div class="photo-strip">
-  <img src="">
-  <img src="">
-  <img src="">
-</div>
-
-<div class="apps-grid">
+<div class="apps-side">
 <div class="app"><div class="icon">相</div><div>相册</div></div>
 <div class="app"><div class="icon">日</div><div>日记</div></div>
 <div class="app"><div class="icon">备</div><div>备忘录</div></div>
 </div>
+</div>
 
 </div>
 
+<!-- ===== 第二页 ===== -->
 <div class="page">
-<div class="apps-grid">
+
+<div class="photo-show">
+<img src="" class="photo1">
+<img src="" class="photo2">
+<img src="" class="photo3">
+</div>
+
+<div class="second-row">
+
+<div class="love-box">
+<div class="love-title">💗 恋爱计时</div>
+<div class="love-days" id="loveDays">0 天</div>
+</div>
+
+<div class="apps-right">
 <div class="app"><div class="icon">微</div><div>微信</div></div>
 <div class="app"><div class="icon">抖</div><div>抖音</div></div>
 <div class="app"><div class="icon">微</div><div>微博</div></div>
+</div>
+
 </div>
 </div>
 
@@ -376,19 +330,10 @@ ID Sweet-0214<br>
 <div class="dot"></div>
 </div>
 
-<div class="app-screen" id="appScreen">
-<div class="app-header">
-<span id="backBtn">‹</span>
-<span id="appTitle"></span>
-</div>
-<div class="app-content" id="appContent"></div>
-</div>
-
 </div>
 </div>
 
 <script>
-/* 时间 */
 function updateTime(){
 const n=new Date();
 const h=String(n.getHours()).padStart(2,'0');
@@ -413,7 +358,7 @@ home.style.transform="translateY(0)";
 }
 });
 
-/* 翻页指示 */
+/* 翻页 */
 pages.addEventListener("scroll",()=>{
 const idx=Math.round(pages.scrollLeft/pages.clientWidth);
 document.querySelectorAll(".dot").forEach((d,i)=>{
@@ -421,95 +366,17 @@ d.classList.toggle("active",i===idx);
 });
 });
 
-/* APP 打开 */
-const appScreen=document.getElementById("appScreen");
-const appTitle=document.getElementById("appTitle");
-const appContent=document.getElementById("appContent");
-const backBtn=document.getElementById("backBtn");
-
-document.querySelectorAll(".app").forEach(app=>{
-app.addEventListener("click",()=>{
-const name=app.innerText.trim();
-appTitle.innerText=name;
-appScreen.style.display="flex";
-
-if(name.includes("相册")){
-renderAlbum();
-}else{
-appContent.innerHTML="<p>App 内容区域</p>";
-}
-});
-});
-
-backBtn.addEventListener("click",()=>{
-appScreen.style.display="none";
-});
-
-/* 相册 */
-function renderAlbum(){
-appContent.innerHTML=`
-<h3>我的相册</h3>
-<input type="file" id="albumInput" multiple accept="image/*">
-<div id="albumGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;"></div>
-`;
-
-const input=document.getElementById("albumInput");
-const grid=document.getElementById("albumGrid");
-let photos=JSON.parse(localStorage.getItem("sweet_album")||"[]");
-
-function refresh(){
-grid.innerHTML="";
-photos.forEach(src=>{
-const img=document.createElement("img");
-img.src=src;
-img.style.width="100%";
-img.style.borderRadius="10px";
-grid.appendChild(img);
-});
-}
-refresh();
-
-input.onchange=e=>{
-Array.from(e.target.files).forEach(file=>{
-const reader=new FileReader();
-reader.onload=ev=>{
-photos.push(ev.target.result);
-localStorage.setItem("sweet_album",JSON.stringify(photos));
-refresh();
-};
-reader.readAsDataURL(file);
-});
-};
-}
-/* ===== 恋爱计时 ===== */
+/* 恋爱计时 */
 function updateLove(){
-  const startDate = new Date("2023-02-14"); // 改成你的纪念日
-  const now = new Date();
-  const diff = now - startDate;
-  const days = Math.floor(diff / (1000*60*60*24));
-  const el = document.getElementById("loveDays");
-  if(el){
-    el.innerText = days + " 天 ♥";
-  }
+const startDate=new Date("2023-02-14");
+const now=new Date();
+const diff=now-startDate;
+const days=Math.floor(diff/(1000*60*60*24));
+document.getElementById("loveDays").innerText=days+" 天";
 }
 updateLove();
 setInterval(updateLove,60000);
-
-/* ===== 音乐播放器 ===== */
-const music = document.getElementById("bgm");
-const musicBtn = document.getElementById("musicBtn");
-
-if(music && musicBtn){
-  musicBtn.addEventListener("click",()=>{
-    if(music.paused){
-      music.play();
-      musicBtn.innerText="暂停";
-    }else{
-      music.pause();
-      musicBtn.innerText="播放";
-    }
-  });
-}
 </script>
+
 </body>
 </html>
