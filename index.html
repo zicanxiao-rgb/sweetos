@@ -1,6 +1,265 @@
-<script>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SweetOS A</title>
 
-/* 时间 */
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#eef1f6;
+font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+}
+
+.phone{
+width:350px;
+height:720px;
+border-radius:48px;
+overflow:hidden;
+position:relative;
+box-shadow:0 30px 80px rgba(0,0,0,.18);
+background:#f7f9fc;
+}
+
+.status-bar{
+position:absolute;
+top:18px;
+width:100%;
+padding:0 30px;
+display:flex;
+justify-content:space-between;
+font-size:14px;
+color:#333;
+z-index:10;
+}
+
+.lock{
+position:absolute;
+inset:0;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:rgba(255,255,255,.4);
+backdrop-filter:blur(20px);
+transition:.5s;
+z-index:50;
+}
+.lock-time{font-size:58px;font-weight:200;}
+.swipe{position:absolute;bottom:80px;font-size:13px;color:#666;}
+
+.home{
+position:absolute;
+inset:0;
+transform:translateY(100%);
+transition:.5s;
+display:flex;
+flex-direction:column;
+}
+
+.pages{
+flex:1;
+display:flex;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+}
+.pages::-webkit-scrollbar{display:none;}
+.page{
+flex:0 0 100%;
+scroll-snap-align:start;
+padding:100px 22px 100px;
+}
+
+.bg-area{
+height:180px;
+border-radius:28px;
+background:#dfe6ef;
+background-size:cover;
+background-position:center;
+cursor:pointer;
+}
+
+.avatar{
+width:88px;
+height:88px;
+border-radius:50%;
+border:4px solid white;
+overflow:hidden;
+margin:-45px auto 15px;
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+cursor:pointer;
+background:#ccc;
+}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+
+.profile{text-align:center;margin-bottom:25px;}
+.profile h3{font-size:17px;}
+.profile p{font-size:13px;color:#777;margin-top:4px;}
+
+.content-row{display:flex;gap:15px;}
+
+.id-card{
+flex:1.3;
+background:rgba(255,255,255,.7);
+backdrop-filter:blur(20px);
+border-radius:22px;
+padding:15px;
+font-size:12px;
+box-shadow:0 8px 25px rgba(0,0,0,.05);
+display:flex;
+gap:10px;
+}
+.id-card img{
+width:65px;height:65px;border-radius:14px;
+object-fit:cover;cursor:pointer;background:#ddd;
+}
+
+.apps,.apps2{
+flex:1;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+.app{text-align:center;font-size:11px;cursor:pointer;}
+.icon{
+width:55px;height:55px;margin:auto;
+border-radius:18px;
+background:linear-gradient(145deg,#f2f5fa,#e4e9f2);
+margin-bottom:6px;
+}
+
+.stack{position:relative;height:120px;margin-bottom:30px;}
+.stack img{
+position:absolute;width:95px;height:120px;
+border-radius:18px;object-fit:cover;
+box-shadow:0 12px 30px rgba(0,0,0,.15);
+cursor:pointer;background:#ddd;
+}
+.s1{left:30px;top:10px;transform:rotate(-8deg);}
+.s2{left:110px;top:0;}
+.s3{left:190px;top:15px;transform:rotate(8deg);}
+
+.bottom-row{display:flex;gap:15px;}
+
+.love{
+flex:1.2;background:rgba(255,255,255,.7);
+backdrop-filter:blur(20px);
+border-radius:24px;padding:18px;
+text-align:center;box-shadow:0 8px 25px rgba(0,0,0,.05);
+}
+.love-avatars{display:flex;justify-content:center;gap:12px;margin-bottom:10px;}
+.love-avatars img{
+width:48px;height:48px;border-radius:50%;
+object-fit:cover;cursor:pointer;background:#ddd;
+}
+.love-days{font-size:20px;font-weight:600;margin-top:6px;}
+
+.indicator{
+position:absolute;bottom:85px;left:50%;
+transform:translateX(-50%);display:flex;gap:6px;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:#bbb;opacity:.4;}
+.dot.active{opacity:1;}
+
+.island{
+position:absolute;top:14px;left:50%;
+transform:translateX(-50%);
+width:130px;height:34px;background:black;
+border-radius:22px;z-index:100;
+box-shadow:0 4px 15px rgba(0,0,0,.25);
+}
+
+/* App 独立页面 */
+.app-screen{
+position:absolute;inset:0;
+background:#f7f9fc;
+transform:translateX(100%);
+transition:.4s;
+z-index:300;
+display:flex;
+flex-direction:column;
+}
+.app-header{
+height:60px;display:flex;align-items:center;
+padding:0 20px;border-bottom:1px solid #eee;
+background:#fff;font-size:14px;
+}
+#backBtn{margin-right:15px;cursor:pointer;}
+.app-content{flex:1;padding:20px;overflow:auto;}
+</style>
+</head>
+
+<body>
+<div class="phone">
+
+<div class="status-bar">
+<div id="time">--:--</div>
+</div>
+
+<div class="island"></div>
+
+<div class="lock" id="lock">
+<div class="lock-time" id="lockTime">00:00</div>
+<div class="swipe">↑ 上滑解锁</div>
+</div>
+
+<div class="home" id="home">
+<div class="pages" id="pages">
+
+<div class="page">
+
+<div class="bg-area" id="bgArea"></div>
+<input type="file" id="bgInput" hidden>
+
+<div class="avatar"><img id="mainAvatarImg"></div>
+<input type="file" id="mainAvatarInput" hidden>
+
+<div class="profile">
+<h3 contenteditable>甜妹用户</h3>
+<p contenteditable>灰粉宇宙少女 ♡ · 上海</p>
+</div>
+
+<div class="content-row">
+<div class="id-card">
+<img id="idImg">
+<input type="file" id="idInput" hidden>
+<div contenteditable>
+姓名 林甜甜<br>
+ID Sweet0214<br>
+生日 02.14<br>
+性格 ENFP<br>
+爱好 摄影 旅行
+</div>
+</div>
+
+<div class="apps">
+<div class="app"><div class="icon"></div>相册</div>
+<div class="app"><div class="icon"></div>日记</div>
+<div class="app"><div class="icon"></div>微博</div>
+<div class="app"><div class="icon"></div>备忘录</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="app-screen" id="appScreen">
+<div class="app-header">
+<span id="backBtn">← 返回</span>
+<span id="appTitle">App</span>
+</div>
+<div class="app-content" id="appContent"></div>
+</div>
+
+</div>
+
+<script>
 function updateTime(){
 let n=new Date();
 let h=String(n.getHours()).padStart(2,'0');
@@ -8,104 +267,31 @@ let m=String(n.getMinutes()).padStart(2,'0');
 time.innerText=h+':'+m;
 lockTime.innerText=h+':'+m;
 }
-setInterval(updateTime,1000);
-updateTime();
+setInterval(updateTime,1000);updateTime();
 
-/* 解锁 */
-let startY=0;
-lock.addEventListener("touchstart",e=>{startY=e.touches[0].clientY;});
-lock.addEventListener("touchend",e=>{
-if(startY-e.changedTouches[0].clientY>80){
+lock.addEventListener("touchend",()=>{
 lock.style.transform="translateY(-100%)";
 home.style.transform="translateY(0)";
-}
 });
 
-/* 翻页 */
-pages.addEventListener("scroll",()=>{
-let idx=Math.round(pages.scrollLeft/pages.clientWidth);
-document.querySelectorAll(".dot").forEach((d,i)=>{
-d.classList.toggle("active",i===idx);
-});
-});
-
-/* 上传函数 */
-function bind(img,input){
-img.onclick=()=>input.click();
-input.onchange=e=>{
-let reader=new FileReader();
-reader.onload=ev=>img.src=ev.target.result;
-reader.readAsDataURL(e.target.files[0]);
-};
-}
-
-bind(mainAvatarImg,mainAvatarInput);
-bind(idImg,idInput);
-bind(s1,s1Input);
-bind(s2,s2Input);
-bind(s3,s3Input);
-bind(me,meInput);
-bind(ta,taInput);
-
-bgArea.onclick=()=>bgInput.click();
-bgInput.onchange=e=>{
-let reader=new FileReader();
-reader.onload=ev=>bgArea.style.backgroundImage=`url(${ev.target.result})`;
-reader.readAsDataURL(e.target.files[0]);
-};
-
-/* 恋爱计时 */
-function updateLove(){
-let d=new Date(loveDate.innerText);
-let now=new Date();
-let diff=Math.floor((now-d)/86400000);
-loveDays.innerText=diff+" 天";
-}
-loveDate.oninput=updateLove;
-setInterval(updateLove,60000);
-updateLove();
-
-/* ===== App 点击功能 ===== */
-
-const appScreen = document.getElementById("appScreen");
-const appContent = document.getElementById("appContent");
-const appTitle = document.getElementById("appTitle");
-const backBtn = document.getElementById("backBtn");
+const appScreen=document.getElementById("appScreen");
+const appContent=document.getElementById("appContent");
+const appTitle=document.getElementById("appTitle");
+const backBtn=document.getElementById("backBtn");
 
 document.querySelectorAll(".app").forEach(app=>{
-  app.addEventListener("click",()=>{
-    const name = app.innerText.trim();
-    openApp(name);
-  });
+app.addEventListener("click",()=>{
+let name=app.innerText.trim();
+appTitle.innerText=name;
+appContent.innerHTML="<h2>"+name+"</h2>";
+appScreen.style.transform="translateX(0)";
+});
 });
 
-function openApp(name){
-  appScreen.style.transform="translateX(0)";
-  appTitle.innerText = name;
-
-  if(name==="相册"){
-    appContent.innerHTML="<h2>📷 我的相册</h2><p>这里可以放照片内容</p>";
-  }
-
-  if(name==="日记"){
-    appContent.innerHTML="<h2>📔 日记</h2><textarea style='width:100%;height:200px;'></textarea>";
-  }
-
-  if(name==="微博"){
-    appContent.innerHTML="<h2>📰 动态</h2><p>这里是微博时间线</p>";
-  }
-
-  if(name==="备忘录"){
-    appContent.innerHTML="<h2>📝 备忘录</h2><input placeholder='写点什么...' style='width:100%;padding:10px;' />";
-  }
-
-  if(name==="微信"){
-    appContent.innerHTML="<h2>💬 微信</h2><p>聊天界面</p>";
-  }
-}
-
 backBtn.onclick=()=>{
-  appScreen.style.transform="translateX(100%)";
+appScreen.style.transform="translateX(100%)";
 };
-
 </script>
+
+</body>
+</html>
