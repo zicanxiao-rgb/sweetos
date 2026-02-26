@@ -277,7 +277,38 @@ border-radius:22px;
 z-index:100;
 box-shadow:0 4px 15px rgba(0,0,0,.25);
 }
+/* ===== 新增：App独立页面 ===== */
+.app-screen{
+position:absolute;
+inset:0;
+background:#f7f9fc;
+transform:translateX(100%);
+transition:.4s;
+z-index:300;
+display:flex;
+flex-direction:column;
+}
 
+.app-header{
+height:60px;
+display:flex;
+align-items:center;
+padding:0 20px;
+font-size:14px;
+border-bottom:1px solid #eee;
+background:#fff;
+}
+
+#backBtn{
+margin-right:15px;
+cursor:pointer;
+}
+
+.app-content{
+flex:1;
+padding:20px;
+overflow:auto;
+}
 </style>
 </head>
 
@@ -381,7 +412,14 @@ ID Sweet0214<br>
 </div>
 
 </div>
-
+<!-- App 独立页面层（新增） -->
+<div class="app-screen" id="appScreen">
+  <div class="app-header">
+    <span id="backBtn">← 返回</span>
+    <span id="appTitle">App</span>
+  </div>
+  <div class="app-content" id="appContent"></div>
+</div>
 <div class="indicator">
 <div class="dot active"></div>
 <div class="dot"></div>
@@ -455,7 +493,38 @@ loveDays.innerText=diff+" 天";
 loveDate.oninput=updateLove;
 setInterval(updateLove,60000);
 updateLove();
+/* ===== 新增：App独立页面 ===== */
+.app-screen{
+position:absolute;
+inset:0;
+background:#f7f9fc;
+transform:translateX(100%);
+transition:.4s;
+z-index:300;
+display:flex;
+flex-direction:column;
+}
 
+.app-header{
+height:60px;
+display:flex;
+align-items:center;
+padding:0 20px;
+font-size:14px;
+border-bottom:1px solid #eee;
+background:#fff;
+}
+
+#backBtn{
+margin-right:15px;
+cursor:pointer;
+}
+
+.app-content{
+flex:1;
+padding:20px;
+overflow:auto;
+}
 </script>
 </body>
 </html>
