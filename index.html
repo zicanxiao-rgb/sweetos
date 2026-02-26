@@ -217,6 +217,85 @@ body{
   overflow:auto;
   padding:20px;
 }
+/* ===== 恋爱计时 ===== */
+.love-box{
+  margin-top:18px;
+  padding:14px;
+  border-radius:20px;
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(25px);
+  text-align:center;
+  box-shadow:0 10px 30px rgba(255,105,180,.1);
+}
+.love-title{
+  font-size:13px;
+  opacity:.7;
+}
+.love-days{
+  font-size:20px;
+  font-weight:600;
+  margin-top:6px;
+  color:#ff4fa3;
+}
+
+/* ===== 音乐播放器 ===== */
+.music-box{
+  margin-top:14px;
+  padding:12px;
+  border-radius:18px;
+  background:rgba(255,255,255,.5);
+  backdrop-filter:blur(20px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:13px;
+}
+.music-box button{
+  background:#ff6fb1;
+  border:none;
+  padding:6px 14px;
+  border-radius:14px;
+  color:white;
+  font-size:12px;
+}
+
+/* ===== 首页照片条 ===== */
+.photo-strip{
+  margin-top:14px;
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+}
+.photo-strip img{
+  width:90px;
+  height:90px;
+  border-radius:16px;
+  object-fit:cover;
+}
+.photo-strip::-webkit-scrollbar{display:none;}
+
+/* ===== 升级版 ID 卡（覆盖原样式） ===== */
+.id-card{
+  margin-top:22px;
+  padding:18px;
+  border-radius:26px;
+  background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(255,240,250,.4));
+  backdrop-filter:blur(40px);
+  font-size:13px;
+  line-height:1.6;
+  position:relative;
+  box-shadow:0 15px 40px rgba(255,105,180,.15);
+  border:1px solid rgba(255,255,255,.6);
+}
+.id-card::before{
+  content:"Sweet ID";
+  position:absolute;
+  top:12px;
+  right:18px;
+  font-size:11px;
+  color:rgba(0,0,0,.25);
+  letter-spacing:1px;
+}
 </style>
 </head>
 
@@ -253,6 +332,25 @@ body{
 ID Sweet-0214<br>
 学校 Seoul Art High<br>
 性格 ENFP
+</div>
+<!-- 恋爱计时 -->
+<div class="love-box">
+  <div class="love-title">💗 恋爱计时</div>
+  <div id="loveDays" class="love-days">计算中...</div>
+</div>
+
+<!-- 音乐播放器 -->
+<div class="music-box">
+  <div>🎵 我们的歌</div>
+  <button id="musicBtn">播放</button>
+  <audio id="bgm" src=""></audio>
+</div>
+
+<!-- 精选照片 -->
+<div class="photo-strip">
+  <img src="">
+  <img src="">
+  <img src="">
 </div>
 
 <div class="apps-grid">
@@ -382,6 +480,35 @@ refresh();
 reader.readAsDataURL(file);
 });
 };
+}
+/* ===== 恋爱计时 ===== */
+function updateLove(){
+  const startDate = new Date("2023-02-14"); // 改成你的纪念日
+  const now = new Date();
+  const diff = now - startDate;
+  const days = Math.floor(diff / (1000*60*60*24));
+  const el = document.getElementById("loveDays");
+  if(el){
+    el.innerText = days + " 天 ♥";
+  }
+}
+updateLove();
+setInterval(updateLove,60000);
+
+/* ===== 音乐播放器 ===== */
+const music = document.getElementById("bgm");
+const musicBtn = document.getElementById("musicBtn");
+
+if(music && musicBtn){
+  musicBtn.addEventListener("click",()=>{
+    if(music.paused){
+      music.play();
+      musicBtn.innerText="暂停";
+    }else{
+      music.pause();
+      musicBtn.innerText="播放";
+    }
+  });
 }
 </script>
 </body>
