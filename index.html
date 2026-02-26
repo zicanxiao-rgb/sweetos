@@ -1,46 +1,498 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-<meta charset="UTF-8">
-<title>SweetOS</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SweetOS — 调整昵称与签名布局</title>
 <style>
+*{margin:0;padding:0;box-sizing:border-box;}
 body{
-  margin:0;
-  background:black;
-  color:white;
-  font-family:sans-serif;
-  text-align:center;
+  height:100vh;display:flex;justify-content:center;align-items:center;
+  background:#efe8ee;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+  overflow:hidden;
 }
-h1{
-  margin-top:40px;
+
+/* 手机外壳 */
+.phone{
+  width:350px;height:720px;border-radius:50px;overflow:hidden;position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);background-size:cover;background-position:center;
 }
-.app{
-  width:80px;
-  height:80px;
-  background:#222;
-  border-radius:20px;
-  display:inline-flex;
+
+/* 状态栏 & 灵动岛 */
+
+/* ===== iPhone比例状态栏 ===== */
+.status-bar{
+  position:absolute;
+  top:18px;
+  left:0;
+  width:100%;
+  height:40px;
+  display:flex;
   align-items:center;
+  justify-content:space-between;
+  padding:0 55px;   /* 关键：加大左右安全距离 */
+  color:white;
+  font-size:14px;
+  font-weight:600;
+  z-index:200;
+  pointer-events:none;
+}
+
+.status-bar div:first-child{
+  position:absolute;
+  left:30px;
+}
+
+.status-bar div:last-child{
+  position:absolute;
+  right:30px;
+}
+
+/* ===== 灵动岛 ===== */
+.island{
+  position:absolute;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  width:130px;
+  height:34px;
+  background:black;
+  border-radius:22px;
+  z-index:300;
+}
+
+/* 锁屏 */
+.lock{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;backdrop-filter:blur(25px);transition:.5s;z-index:150;}
+.lock-time{font-size:64px;font-weight:300;}
+.swipe{position:absolute;bottom:70px;font-size:13px;opacity:.7;}
+
+/* 主界面 */
+.home{position:absolute;inset:0;transform:translateY(100%);transition:.5s;display:flex;flex-direction:column;}
+.pages{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;}
+.pages::-webkit-scrollbar{display:none;}
+.page{flex:0 0 100%;scroll-snap-align:start;padding:110px 25px 120px;position:relative;}
+
+/* 头像与简介整体右侧对齐更协调 */
+.profile-bg{height:150px;border-radius:28px;margin:0 12px 6px 12px;background-size:cover;background-position:center;box-shadow:0 10px 30px rgba(0,0,0,.08);cursor:pointer;border:1px solid rgba(255,255,255,.25)}
+.avatar{position:absolute;top:118px;left:28px;width:98px;height:98px;border-radius:50%;border:5px solid white;overflow:hidden;background:white;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+/* 把简介区域做成一个右侧卡块：与头像垂直中线对齐 */
+.profile-info{
+  position: absolute;
+  left: 140px; /* 从头像右侧开始 */
+  top: 118px; /* 与头像同 top，之后用 padding 调整视觉中心 */
+  width: calc(100% - 160px);
+  padding: 8px 10px;
+  display:flex;
+  flex-direction:column;
   justify-content:center;
-  margin:15px;
-  cursor:pointer;
+  align-items:flex-start;
+  gap:6px;
+  color:#333;
 }
-.app:hover{
-  background:#444;
+.profile-info h3{font-size:17px;line-height:1;margin-bottom:0; padding:0;}
+.profile-info p{font-size:13px;color:#6e5560;margin-top:4px;margin-bottom:0;}
+.profile-info .location{font-size:12px;color:rgba(60,50,60,.6);margin-top:2px;}
+
+/* ID 卡 */
+.id-card{
+  margin-top:22px;padding:16px;border-radius:22px;background:rgba(255,255,255,.55);
+  backdrop-filter:blur(30px);box-shadow:0 15px 35px rgba(0,0,0,.08);font-size:12px;
 }
+.id-row{display:flex;justify-content:space-between;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid rgba(0,0,0,.06);}
+
+/* APP 区（左右分布更协调） */
+.apps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px;}
+.app{text-align:center;font-size:11px;cursor:grab}
+.icon{width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#f4e8ee,#e8e3f6);margin:0 auto 6px;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+
+/* 恋爱组件（动画保持不变） */
+.love-widget{
+  margin-top:20px;padding:16px;border-radius:24px;background:rgba(255,255,255,.6);
+  backdrop-filter:blur(25px);display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);animation:float 3s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+.love-avatars{display:flex;align-items:center;gap:10px}
+.love-avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;border:3px solid white;cursor:pointer}
+.love-avatar img{width:100%;height:100%;object-fit:cover}
+.love-text{font-size:13px;opacity:.85}
+
+/* 图片组件 */
+.photo-widget{margin-top:18px;height:130px;border-radius:20px;background:rgba(255,255,255,.6);overflow:hidden;cursor:pointer}
+.photo-widget img{width:100%;height:100%;object-fit:cover}
+
+/* 页面指示点 */
+.indicator{position:absolute;bottom:95px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+.dot{width:6px;height:6px;border-radius:50%;background:white;opacity:.4}
+.dot.active{opacity:1}
+
 </style>
 </head>
 <body>
 
-<h1>SweetOS</h1>
+<div class="phone" id="phone">
 
-<div class="app" onclick="openApp('相册')">相册</div>
-<div class="app" onclick="openApp('设置')">设置</div>
+  <div class="status-bar">
+    <div id="time">--:--</div>
+    <div>▮▮▮ 85%</div>
+  </div>
+
+  <div class="island" aria-hidden></div>
+
+  <div class="lock" id="lock">
+    <div class="lock-time" id="lockTime">00:00</div>
+    <div class="swipe">↑ 上滑解锁</div>
+  </div>
+
+  <div class="home" id="home">
+    <div class="pages" id="pages">
+
+      <!-- 第一页 -->
+      <div class="page" id="page1">
+        <div class="profile-bg" id="profileBg"></div>
+
+        <div class="avatar" id="avatarBox"><img id="avatarImg" alt="头像"></div>
+
+        <!-- 右侧简介区域：已调整位置与样式 -->
+        <div class="profile-info">
+          <h3 id="nickname" contenteditable="true">甜妹用户</h3>
+          <div id="idSign" contenteditable="true" style="font-size:13px;color:#6e5560">灰粉宇宙少女 ♡</div>
+          <div class="location" id="loc" contenteditable="true">📍 上海</div>
+        </div>
+
+        <div class="id-card" id="idCard" contenteditable="true">
+          <div class="id-row"><span>姓名</span><div id="idName">林甜甜</div></div>
+          <div class="id-row"><span>ID</span><div id="idNum">Sweet-0214</div></div>
+          <div class="id-row"><span>学校</span><div id="idSchool">Seoul Art High</div></div>
+          <div class="id-row"><span>性格</span><div id="idType">ENFP</div></div>
+        </div>
+
+        <!-- apps 均匀分布（左右结构更协调） -->
+        <div class="apps-grid" id="appsGrid">
+          <div class="app"><div class="icon">相</div><div>相册</div></div>
+          <div class="app"><div class="icon">日</div><div>日记</div></div>
+          <div class="app"><div class="icon">备</div><div>备忘录</div></div>
+        </div>
+      </div>
+
+      <!-- 第二页 -->
+      <div class="page" id="page2">
+        <div class="love-widget" id="loveWidget">
+          <div class="love-avatars">
+            <div class="love-avatar" id="loveA"><img id="loveImgA" alt="taA"></div>
+            <div class="love-avatar" id="loveB"><img id="loveImgB" alt="taB"></div>
+          </div>
+          <div class="love-text" id="loveText">在一起 X 天 ♡</div>
+        </div>
+
+        <div class="photo-widget" id="photoWidget"><img id="photoImg" alt="photo"></div>
+
+        <div class="apps-grid" id="appsGrid2">
+          <div class="app"><div class="icon">微</div><div>微信</div></div>
+          <div class="app"><div class="icon">抖</div><div>抖音</div></div>
+          <div class="app"><div class="icon">微</div><div>微博</div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="indicator"><div class="dot active"></div><div class="dot"></div></div>
+
+<div class="app-screen" id="appScreen">
+    <div class="app-header">
+        <span id="backBtn">‹</span>
+        <span id="appTitle"></span>
+    </div>
+    <div class="app-content" id="appContent"></div>
+</div>
+
+  </div>
+
+</div>
+
+<!-- 文件选择 -->
+<input type="file" id="avatarInput" accept="image/*" hidden>
+<input type="file" id="bgInput" accept="image/*" hidden>
+<input type="file" id="photoInput" accept="image/*" hidden>
+<input type="file" id="loveInputA" accept="image/*" hidden>
+<input type="file" id="loveInputB" accept="image/*" hidden>
 
 <script>
-function openApp(name){
-  alert("打开 " + name);
+/* ---------- 时间 ---------- */
+function updateTime(){
+  const n = new Date();
+  const h = String(n.getHours()).padStart(2,'0');
+  const m = String(n.getMinutes()).padStart(2,'0');
+  const timeEl = document.getElementById('time');
+  const lockEl = document.getElementById('lockTime');
+  if(timeEl) timeEl.innerText = h+':'+m;
+  if(lockEl) lockEl.innerText = h+':'+m;
 }
+setInterval(updateTime,1000); updateTime();
+
+/* ---------- 解锁（稳定） ---------- */
+(function(){
+  const lock = document.getElementById('lock');
+  const home = document.getElementById('home');
+  if(!lock || !home) return;
+  let startY=0, currY=0, dragging=false;
+  lock.addEventListener('touchstart', e=>{ startY = e.touches[0].clientY; dragging=true; }, {passive:true});
+  lock.addEventListener('touchmove', e=>{ if(!dragging) return; currY = e.touches[0].clientY; let d = startY - currY; if(d>0) lock.style.transform = `translateY(-${Math.min(d,240)}px)`; }, {passive:true});
+  lock.addEventListener('touchend', ()=>{ dragging=false; const diff = startY - currY; if(diff>80){ lock.style.transform='translateY(-100%)'; home.style.transform='translateY(0)'; } else lock.style.transform='translateY(0)'; });
+})();
+
+/* ---------- 页面指示（左右翻页） ---------- */
+const pages = document.getElementById('pages');
+pages.addEventListener('scroll', ()=>{
+  const idx = Math.round(pages.scrollLeft / pages.clientWidth);
+  document.querySelectorAll('.dot').forEach((d,i)=> d.classList.toggle('active', i===idx));
+});
+
+/* ---------- 存取工具 ---------- */
+function save(key, val){ try{ localStorage.setItem('sweetos:'+key, val); }catch(e){} }
+function load(key){ try{ return localStorage.getItem('sweetos:'+key); }catch(e){return null;} }
+
+/* ---------- 背景 & 头像 & 图片（本地相册） ---------- */
+const avatarInput = document.getElementById('avatarInput');
+const bgInput = document.getElementById('bgInput');
+const photoInput = document.getElementById('photoInput');
+const loveInputA = document.getElementById('loveInputA');
+const loveInputB = document.getElementById('loveInputB');
+
+const avatarBox = document.getElementById('avatarBox'), avatarImg = document.getElementById('avatarImg');
+const profileBg = document.getElementById('profileBg');
+const photoWidget = document.getElementById('photoWidget'), photoImg = document.getElementById('photoImg');
+const loveImgA = document.getElementById('loveImgA'), loveImgB = document.getElementById('loveImgB');
+
+avatarBox.onclick = ()=> avatarInput.click();
+avatarInput.addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = ev => { avatarImg.src = ev.target.result; save('avatar', ev.target.result); };
+  rd.readAsDataURL(f);
+});
+const bgClickHandler = ()=> bgInput.click();
+profileBg.onclick = bgClickHandler;
+bgInput.addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = ev => { profileBg.style.backgroundImage = `url(${ev.target.result})`; save('bg', ev.target.result); };
+  rd.readAsDataURL(f);
+});
+
+photoWidget.onclick = ()=> photoInput.click();
+photoInput.addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = ev => { photoImg.src = ev.target.result; save('photo', ev.target.result); };
+  rd.readAsDataURL(f);
+});
+
+loveA.onclick = ()=> loveInputA.click();
+loveB.onclick = ()=> loveInputB.click();
+loveInputA.addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = ev => { loveImgA.src = ev.target.result; save('loveA', ev.target.result); };
+  rd.readAsDataURL(f);
+});
+loveInputB.addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = ev => { loveImgB.src = ev.target.result; save('loveB', ev.target.result); };
+  rd.readAsDataURL(f);
+});
+
+/* 恢复已保存的图片（如果有）*/
+if(load('bg')) profileBg.style.backgroundImage = `url(${load('bg')})`;
+if(load('avatar')) avatarImg.src = load('avatar');
+if(load('photo')) photoImg.src = load('photo');
+if(load('loveA')) loveImgA.src = load('loveA');
+if(load('loveB')) loveImgB.src = load('loveB');
+
+/* ---------- 恋爱时间精确计算（无 prompt 稳定版） ---------- */
+
+let loveStartStr = load('loveStart') || "2023-02-14 00:00";
+let loveStart = new Date(loveStartStr);
+
+function updateLove(){
+  const now = new Date();
+  const diff = now - loveStart;
+  if(diff < 0) return;
+
+  const totalSeconds = Math.floor(diff / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const loveText = document.getElementById('loveText');
+  if(loveText){
+    loveText.innerText =
+      "在一起 " +
+      days + "天 " +
+      hours + "时 " +
+      minutes + "分 " +
+      seconds + "秒 ♡";
+  }
+}
+
+setInterval(updateLove, 1000);
+updateLove();
+
+/* 点击恋爱组件修改时间 */
+const loveWidget = document.getElementById('loveWidget');
+if(loveWidget){
+  loveWidget.addEventListener('dblclick', ()=>{
+    let newTime = prompt("修改在一起时间\n格式：2023-02-14 20:00");
+    if(newTime){
+      save('loveStart', newTime);
+      loveStart = new Date(newTime);
+    }
+  });
+}
+
+/* ---------- 昵称 / 签名 / 地点：调整后自动保存 ---------- */
+const nicknameEl = document.getElementById('nickname');
+const signEl = document.getElementById('idSign');
+const locEl = document.getElementById('loc');
+
+function restoreTexts(){
+  const n = load('nickname'), s = load('idSign'), l = load('loc');
+  if(n && nicknameEl) nicknameEl.textContent = n;
+  if(s && signEl) signEl.textContent = s;
+  if(l && locEl) locEl.textContent = l;
+}
+restoreTexts();
+
+function saveTextHandler(key, el){
+  el.addEventListener('input', ()=> save(key, el.textContent));
+  el.addEventListener('blur', ()=> save(key, el.textContent));
+}
+if(nicknameEl) saveTextHandler('nickname', nicknameEl);
+if(signEl) saveTextHandler('idSign', signEl);
+if(locEl) saveTextHandler('loc', locEl);
+
+/* ---------- Save loveStart when user edits via prompt (optional) ----------
+   (Since earlier versions had static date, I keep default; if you want an input to set loveStart I can add.)
+*/
+
+/* ---------- 页面初始化完毕 ---------- */
+
+/* ---------- APP 打开 / 关闭 ---------- */
+
+const appScreen = document.getElementById("appScreen");
+const backBtn = document.getElementById("backBtn");
+const appTitle = document.getElementById("appTitle");
+
+document.querySelectorAll(".app").forEach(app=>{
+  app.addEventListener("click", ()=>{
+    appTitle.innerText = app.innerText;
+    appScreen.style.display = "flex";
+  });
+});
+
+if(backBtn){
+  backBtn.addEventListener("click", ()=>{
+    appScreen.style.display = "none";
+  });
+}
+
+/* ========= APP 点击逻辑（新增，不影响原代码） ========= */
+
+const appScreen = document.getElementById("appScreen");
+const appTitle = document.getElementById("appTitle");
+const appContent = document.getElementById("appContent");
+const backBtn = document.getElementById("backBtn");
+
+document.querySelectorAll(".app").forEach(app=>{
+  app.addEventListener("click", ()=>{
+
+    const name = app.innerText.trim();
+    appTitle.innerText = name;
+    appScreen.style.display = "flex";
+
+    if(name.includes("相册")){
+      renderAlbum();
+    }else{
+      appContent.innerHTML = "<p>App 内容区域</p>";
+    }
+
+  });
+});
+
+backBtn.addEventListener("click", ()=>{
+  appScreen.style.display = "none";
+});
+
+/* ========= 相册功能 ========= */
+
+function renderAlbum(){
+
+  appContent.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <h3 style="margin:0;">我的相册</h3>
+      <button id="addPhotoBtn"
+        style="border:none;background:#f2f2f2;padding:8px 14px;border-radius:12px;">
+        + 添加
+      </button>
+    </div>
+
+    <div id="albumGrid"
+      style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+    </div>
+
+    <input type="file" id="albumFileInput" accept="image/*" multiple hidden>
+  `;
+
+  const grid = document.getElementById("albumGrid");
+  const input = document.getElementById("albumFileInput");
+
+  let photos = JSON.parse(localStorage.getItem("sweet_album") || "[]");
+
+  function refresh(){
+    grid.innerHTML = "";
+    photos.forEach((src)=>{
+      const box = document.createElement("div");
+      box.style.width = "100%";
+      box.style.paddingBottom = "100%";
+      box.style.position = "relative";
+      box.style.overflow = "hidden";
+      box.style.borderRadius = "12px";
+
+      const img = document.createElement("img");
+      img.src = src;
+      img.style.position = "absolute";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
+
+      box.appendChild(img);
+      grid.appendChild(box);
+    });
+  }
+
+  refresh();
+
+  document.getElementById("addPhotoBtn").onclick = ()=>{
+    input.click();
+  };
+
+  input.addEventListener("change", e=>{
+    Array.from(e.target.files).forEach(file=>{
+      const reader = new FileReader();
+      reader.onload = ev=>{
+        photos.push(ev.target.result);
+        localStorage.setItem("sweet_album", JSON.stringify(photos));
+        refresh();
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+}
+
 </script>
 
 </body>
