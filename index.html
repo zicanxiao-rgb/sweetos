@@ -231,6 +231,39 @@ width:6px;height:6px;border-radius:50%;
 background:#bbb;opacity:.4;
 }
 .dot.active{opacity:1;}
+.right-status{
+display:flex;
+align-items:center;
+gap:6px;
+font-size:13px;
+}
+
+/* 电池 */
+.battery{
+width:24px;
+height:12px;
+border:1.5px solid #333;
+border-radius:3px;
+position:relative;
+}
+
+.battery::after{
+content:'';
+position:absolute;
+right:-4px;
+top:3px;
+width:3px;
+height:6px;
+background:#333;
+border-radius:1px;
+}
+
+.level{
+height:100%;
+width:95%;
+background:#333;
+border-radius:2px;
+}
 /* 灵动岛 */
 .island{
 position:absolute;
@@ -245,11 +278,6 @@ z-index:100;
 box-shadow:0 4px 15px rgba(0,0,0,.25);
 }
 
-/* 让时间固定在左边 */
-.status-bar{
-justify-content:flex-start;
-padding-left:30px;
-}
 </style>
 </head>
 
@@ -258,6 +286,15 @@ padding-left:30px;
 
 <div class="status-bar">
   <div id="time">--:--</div>
+
+  <div class="right-status">
+    <span class="signal">▮▮▮</span>
+    <span>5G</span>
+
+    <div class="battery">
+      <div class="level" id="batteryLevel"></div>
+    </div>
+  </div>
 </div>
 
 <div class="island"></div>
