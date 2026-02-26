@@ -27,6 +27,7 @@ box-shadow:0 30px 80px rgba(0,0,0,.18);
 background:#f7f9fc;
 }
 
+/* 状态栏 */
 .status-bar{
 position:absolute;
 top:18px;
@@ -39,6 +40,51 @@ color:#333;
 z-index:10;
 }
 
+.right-status{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.battery{
+width:24px;
+height:12px;
+border:1.5px solid #333;
+border-radius:3px;
+position:relative;
+}
+.battery::after{
+content:'';
+position:absolute;
+right:-4px;
+top:3px;
+width:3px;
+height:6px;
+background:#333;
+border-radius:1px;
+}
+.level{
+height:100%;
+width:90%;
+background:#333;
+border-radius:2px;
+}
+
+/* 灵动岛 */
+.island{
+position:absolute;
+top:14px;
+left:50%;
+transform:translateX(-50%);
+width:130px;
+height:34px;
+background:black;
+border-radius:22px;
+z-index:100;
+box-shadow:0 4px 15px rgba(0,0,0,.25);
+}
+
+/* 锁屏 */
 .lock{
 position:absolute;
 inset:0;
@@ -76,6 +122,7 @@ scroll-snap-align:start;
 padding:100px 22px 100px;
 }
 
+/* 第一页 */
 .bg-area{
 height:180px;
 border-radius:28px;
@@ -86,15 +133,11 @@ cursor:pointer;
 }
 
 .avatar{
-width:88px;
-height:88px;
-border-radius:50%;
+width:88px;height:88px;border-radius:50%;
 border:4px solid white;
-overflow:hidden;
-margin:-45px auto 15px;
+overflow:hidden;margin:-45px auto 15px;
 box-shadow:0 8px 25px rgba(0,0,0,.08);
-cursor:pointer;
-background:#ccc;
+cursor:pointer;background:#ccc;
 }
 .avatar img{width:100%;height:100%;object-fit:cover;}
 
@@ -134,6 +177,7 @@ background:linear-gradient(145deg,#f2f5fa,#e4e9f2);
 margin-bottom:6px;
 }
 
+/* 第二页 */
 .stack{position:relative;height:120px;margin-bottom:30px;}
 .stack img{
 position:absolute;width:95px;height:120px;
@@ -153,7 +197,9 @@ backdrop-filter:blur(20px);
 border-radius:24px;padding:18px;
 text-align:center;box-shadow:0 8px 25px rgba(0,0,0,.05);
 }
-.love-avatars{display:flex;justify-content:center;gap:12px;margin-bottom:10px;}
+.love-avatars{
+display:flex;justify-content:center;gap:12px;margin-bottom:10px;
+}
 .love-avatars img{
 width:48px;height:48px;border-radius:50%;
 object-fit:cover;cursor:pointer;background:#ddd;
@@ -162,36 +208,14 @@ object-fit:cover;cursor:pointer;background:#ddd;
 
 .indicator{
 position:absolute;bottom:85px;left:50%;
-transform:translateX(-50%);display:flex;gap:6px;
-}
-.dot{width:6px;height:6px;border-radius:50%;background:#bbb;opacity:.4;}
-.dot.active{opacity:1;}
-
-.island{
-position:absolute;top:14px;left:50%;
 transform:translateX(-50%);
-width:130px;height:34px;background:black;
-border-radius:22px;z-index:100;
-box-shadow:0 4px 15px rgba(0,0,0,.25);
+display:flex;gap:6px;
 }
-
-/* App 独立页面 */
-.app-screen{
-position:absolute;inset:0;
-background:#f7f9fc;
-transform:translateX(100%);
-transition:.4s;
-z-index:300;
-display:flex;
-flex-direction:column;
+.dot{
+width:6px;height:6px;border-radius:50%;
+background:#bbb;opacity:.4;
 }
-.app-header{
-height:60px;display:flex;align-items:center;
-padding:0 20px;border-bottom:1px solid #eee;
-background:#fff;font-size:14px;
-}
-#backBtn{margin-right:15px;cursor:pointer;}
-.app-content{flex:1;padding:20px;overflow:auto;}
+.dot.active{opacity:1;}
 </style>
 </head>
 
@@ -200,6 +224,12 @@ background:#fff;font-size:14px;
 
 <div class="status-bar">
 <div id="time">--:--</div>
+<div class="right-status">
+<span>5G</span>
+<div class="battery">
+<div class="level"></div>
+</div>
+</div>
 </div>
 
 <div class="island"></div>
@@ -212,12 +242,14 @@ background:#fff;font-size:14px;
 <div class="home" id="home">
 <div class="pages" id="pages">
 
+<!-- 第一页 -->
 <div class="page">
-
 <div class="bg-area" id="bgArea"></div>
 <input type="file" id="bgInput" hidden>
 
-<div class="avatar"><img id="mainAvatarImg"></div>
+<div class="avatar">
+<img id="mainAvatarImg">
+</div>
 <input type="file" id="mainAvatarInput" hidden>
 
 <div class="profile">
@@ -247,14 +279,38 @@ ID Sweet0214<br>
 </div>
 </div>
 
+<!-- 第二页 -->
+<div class="page">
+<div class="stack">
+<img class="s1" id="s1"><input type="file" id="s1Input" hidden>
+<img class="s2" id="s2"><input type="file" id="s2Input" hidden>
+<img class="s3" id="s3"><input type="file" id="s3Input" hidden>
 </div>
 
-<div class="app-screen" id="appScreen">
-<div class="app-header">
-<span id="backBtn">← 返回</span>
-<span id="appTitle">App</span>
+<div class="bottom-row">
+<div class="love">
+<div class="love-avatars">
+<img id="me"><input type="file" id="meInput" hidden>
+<img id="ta"><input type="file" id="taInput" hidden>
 </div>
-<div class="app-content" id="appContent"></div>
+<div contenteditable id="loveDate">2023-02-14</div>
+<div class="love-days" id="loveDays">0 天</div>
+</div>
+
+<div class="apps2">
+<div class="app"><div class="icon"></div>微信</div>
+<div class="app"><div class="icon"></div>相册</div>
+<div class="app"><div class="icon"></div>微博</div>
+<div class="app"><div class="icon"></div>日记</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="indicator">
+<div class="dot active"></div>
+<div class="dot"></div>
 </div>
 
 </div>
@@ -269,28 +325,55 @@ lockTime.innerText=h+':'+m;
 }
 setInterval(updateTime,1000);updateTime();
 
-lock.addEventListener("touchend",()=>{
+let startY=0;
+lock.addEventListener("touchstart",e=>{startY=e.touches[0].clientY;});
+lock.addEventListener("touchend",e=>{
+if(startY-e.changedTouches[0].clientY>80){
 lock.style.transform="translateY(-100%)";
 home.style.transform="translateY(0)";
+}
 });
 
-const appScreen=document.getElementById("appScreen");
-const appContent=document.getElementById("appContent");
-const appTitle=document.getElementById("appTitle");
-const backBtn=document.getElementById("backBtn");
-
-document.querySelectorAll(".app").forEach(app=>{
-app.addEventListener("click",()=>{
-let name=app.innerText.trim();
-appTitle.innerText=name;
-appContent.innerHTML="<h2>"+name+"</h2>";
-appScreen.style.transform="translateX(0)";
+pages.addEventListener("scroll",()=>{
+let idx=Math.round(pages.scrollLeft/pages.clientWidth);
+document.querySelectorAll(".dot").forEach((d,i)=>{
+d.classList.toggle("active",i===idx);
 });
 });
 
-backBtn.onclick=()=>{
-appScreen.style.transform="translateX(100%)";
+function bind(img,input){
+img.onclick=()=>input.click();
+input.onchange=e=>{
+let reader=new FileReader();
+reader.onload=ev=>img.src=ev.target.result;
+reader.readAsDataURL(e.target.files[0]);
 };
+}
+
+bind(mainAvatarImg,mainAvatarInput);
+bind(idImg,idInput);
+bind(s1,s1Input);
+bind(s2,s2Input);
+bind(s3,s3Input);
+bind(me,meInput);
+bind(ta,taInput);
+
+bgArea.onclick=()=>bgInput.click();
+bgInput.onchange=e=>{
+let reader=new FileReader();
+reader.onload=ev=>bgArea.style.backgroundImage=`url(${ev.target.result})`;
+reader.readAsDataURL(e.target.files[0]);
+};
+
+function updateLove(){
+let d=new Date(loveDate.innerText);
+let now=new Date();
+let diff=Math.floor((now-d)/86400000);
+loveDays.innerText=diff+" 天";
+}
+loveDate.oninput=updateLove;
+setInterval(updateLove,60000);
+updateLove();
 </script>
 
 </body>
