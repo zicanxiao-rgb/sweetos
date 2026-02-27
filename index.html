@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SweetOS A</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SweetOS</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -47,8 +47,7 @@ gap:6px;
 }
 
 .battery{
-width:24px;
-height:12px;
+width:24px;height:12px;
 border:1.5px solid #333;
 border-radius:3px;
 position:relative;
@@ -56,16 +55,13 @@ position:relative;
 .battery::after{
 content:'';
 position:absolute;
-right:-4px;
-top:3px;
-width:3px;
-height:6px;
-background:#333;
-border-radius:1px;
+right:-4px;top:3px;
+width:3px;height:6px;
+background:#333;border-radius:1px;
 }
 .level{
 height:100%;
-width:90%;
+width:85%;
 background:#333;
 border-radius:2px;
 }
@@ -76,8 +72,7 @@ position:absolute;
 top:14px;
 left:50%;
 transform:translateX(-50%);
-width:130px;
-height:34px;
+width:130px;height:34px;
 background:black;
 border-radius:22px;
 z-index:100;
@@ -109,6 +104,7 @@ display:flex;
 flex-direction:column;
 }
 
+/* 页面 */
 .pages{
 flex:1;
 display:flex;
@@ -124,8 +120,7 @@ padding:100px 22px 100px;
 
 /* 第一页 */
 .bg-area{
-height:180px;
-border-radius:28px;
+height:180px;border-radius:28px;
 background:#dfe6ef;
 background-size:cover;
 background-position:center;
@@ -152,15 +147,15 @@ flex:1.3;
 background:rgba(255,255,255,.7);
 backdrop-filter:blur(20px);
 border-radius:22px;
-padding:15px;
-font-size:12px;
+padding:15px;font-size:12px;
 box-shadow:0 8px 25px rgba(0,0,0,.05);
-display:flex;
-gap:10px;
+display:flex;gap:10px;
 }
 .id-card img{
-width:65px;height:65px;border-radius:14px;
-object-fit:cover;cursor:pointer;background:#ddd;
+width:65px;height:65px;
+border-radius:14px;
+object-fit:cover;
+cursor:pointer;background:#ddd;
 }
 
 .apps,.apps2{
@@ -192,13 +187,16 @@ cursor:pointer;background:#ddd;
 .bottom-row{display:flex;gap:15px;}
 
 .love{
-flex:1.2;background:rgba(255,255,255,.7);
+flex:1.2;
+background:rgba(255,255,255,.7);
 backdrop-filter:blur(20px);
-border-radius:24px;padding:18px;
-text-align:center;box-shadow:0 8px 25px rgba(0,0,0,.05);
+border-radius:24px;
+padding:18px;text-align:center;
+box-shadow:0 8px 25px rgba(0,0,0,.05);
 }
 .love-avatars{
-display:flex;justify-content:center;gap:12px;margin-bottom:10px;
+display:flex;justify-content:center;
+gap:12px;margin-bottom:10px;
 }
 .love-avatars img{
 width:48px;height:48px;border-radius:50%;
@@ -207,8 +205,8 @@ object-fit:cover;cursor:pointer;background:#ddd;
 .love-days{font-size:20px;font-weight:600;margin-top:6px;}
 
 .indicator{
-position:absolute;bottom:85px;left:50%;
-transform:translateX(-50%);
+position:absolute;bottom:85px;
+left:50%;transform:translateX(-50%);
 display:flex;gap:6px;
 }
 .dot{
@@ -216,6 +214,26 @@ width:6px;height:6px;border-radius:50%;
 background:#bbb;opacity:.4;
 }
 .dot.active{opacity:1;}
+
+/* App 页面 */
+.app-screen{
+position:absolute;inset:0;
+background:#f7f9fc;
+transform:translateX(100%);
+transition:.4s;
+z-index:300;
+display:flex;
+flex-direction:column;
+}
+.app-header{
+height:60px;
+display:flex;align-items:center;
+padding:0 20px;
+border-bottom:1px solid #eee;
+background:#fff;font-size:14px;
+}
+#backBtn{margin-right:15px;cursor:pointer;}
+.app-content{flex:1;padding:20px;overflow:auto;}
 </style>
 </head>
 
@@ -226,9 +244,7 @@ background:#bbb;opacity:.4;
 <div id="time">--:--</div>
 <div class="right-status">
 <span>5G</span>
-<div class="battery">
-<div class="level"></div>
-</div>
+<div class="battery"><div class="level"></div></div>
 </div>
 </div>
 
@@ -271,10 +287,10 @@ ID Sweet0214<br>
 </div>
 
 <div class="apps">
-<div class="app"><div class="icon"></div>相册</div>
-<div class="app"><div class="icon"></div>日记</div>
-<div class="app"><div class="icon"></div>微博</div>
-<div class="app"><div class="icon"></div>备忘录</div>
+<div class="app">相册</div>
+<div class="app">日记</div>
+<div class="app">微博</div>
+<div class="app">备忘录</div>
 </div>
 </div>
 </div>
@@ -298,10 +314,10 @@ ID Sweet0214<br>
 </div>
 
 <div class="apps2">
-<div class="app"><div class="icon"></div>微信</div>
-<div class="app"><div class="icon"></div>相册</div>
-<div class="app"><div class="icon"></div>微博</div>
-<div class="app"><div class="icon"></div>日记</div>
+<div class="app">微信</div>
+<div class="app">相册</div>
+<div class="app">微博</div>
+<div class="app">日记</div>
 </div>
 </div>
 </div>
@@ -311,6 +327,17 @@ ID Sweet0214<br>
 <div class="indicator">
 <div class="dot active"></div>
 <div class="dot"></div>
+</div>
+
+</div>
+
+<!-- App界面 -->
+<div class="app-screen" id="appScreen">
+<div class="app-header">
+<span id="backBtn">← 返回</span>
+<span id="appTitle">App</span>
+</div>
+<div class="app-content" id="appContent"></div>
 </div>
 
 </div>
@@ -325,8 +352,9 @@ lockTime.innerText=h+':'+m;
 }
 setInterval(updateTime,1000);updateTime();
 
+/* 解锁 */
 let startY=0;
-lock.addEventListener("touchstart",e=>{startY=e.touches[0].clientY;});
+lock.addEventListener("touchstart",e=>startY=e.touches[0].clientY);
 lock.addEventListener("touchend",e=>{
 if(startY-e.changedTouches[0].clientY>80){
 lock.style.transform="translateY(-100%)";
@@ -334,6 +362,7 @@ home.style.transform="translateY(0)";
 }
 });
 
+/* 翻页指示 */
 pages.addEventListener("scroll",()=>{
 let idx=Math.round(pages.scrollLeft/pages.clientWidth);
 document.querySelectorAll(".dot").forEach((d,i)=>{
@@ -341,6 +370,7 @@ d.classList.toggle("active",i===idx);
 });
 });
 
+/* 图片替换 */
 function bind(img,input){
 img.onclick=()=>input.click();
 input.onchange=e=>{
@@ -365,6 +395,7 @@ reader.onload=ev=>bgArea.style.backgroundImage=`url(${ev.target.result})`;
 reader.readAsDataURL(e.target.files[0]);
 };
 
+/* 恋爱计时 */
 function updateLove(){
 let d=new Date(loveDate.innerText);
 let now=new Date();
@@ -374,6 +405,25 @@ loveDays.innerText=diff+" 天";
 loveDate.oninput=updateLove;
 setInterval(updateLove,60000);
 updateLove();
+
+/* App 打开 */
+const appScreen=document.getElementById("appScreen");
+const appContent=document.getElementById("appContent");
+const appTitle=document.getElementById("appTitle");
+const backBtn=document.getElementById("backBtn");
+
+document.querySelectorAll(".app").forEach(app=>{
+app.addEventListener("click",()=>{
+let name=app.innerText.trim();
+appTitle.innerText=name;
+appContent.innerHTML="<h2>"+name+"</h2><p>这里是 "+name+" 页面</p>";
+appScreen.style.transform="translateX(0)";
+});
+});
+
+backBtn.onclick=()=>{
+appScreen.style.transform="translateX(100%)";
+};
 </script>
 
 </body>
